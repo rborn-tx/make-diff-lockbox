@@ -12,6 +12,7 @@ set -e -o pipefail
 # DEBUG can be passed in the environment (values: "yes" or "" (empty))
 DEBUG=${DEBUG:-}
 SIM_PULL_ROUNDS_DEFAULT=${SIM_PULL_ROUNDS_DEFAULT:-40}
+MAX_OUTSTD_FETCHER_REQUESTS_SUPP=${MAX_OUTSTD_FETCHER_REQUESTS_SUPP:-}
 
 # Default values for optional arguments.
 #
@@ -98,11 +99,14 @@ simulate_update() {
         function ostree_tmp() { ostree --repo="${tmp_ostree}" "$@"; }
 
         echo "[${round}/${SIM_PULL_ROUNDS}] Pulling commit into OSTree repo and collecting logs."
-        ostree_tmp init  --mode=bare-user
-        ostree_tmp pull-local "${src_ostree}" "${src_commit}" > /dev/null
-        ostree_tmp pull-local "${dst_ostree}" "${dst_commit}" \
-               --require-static-deltas \
-               --verbose >> "${update_log}" 2>&1
+        ostree_tmp init --mode=bare-user
+        ostree_tmp remote add "src" "file://$(realpath "${src_ostree}")" --no-gpg-verify
+        ostree_tmp remote add "dst" "file://$(realpath "${dst_ostree}")" --no-gpg-verify
+        ostree_tmp pull "src" "${src_commit}" > /dev/null
+        ostree_tmp pull "dst" "${dst_commit}" \
+                   --require-static-deltas \
+                   ${MAX_OUTSTD_FETCHER_REQUESTS_SUPP:+--max-outstanding-fetcher-requests=1} \
+                   --verbose >> "${update_log}" 2>&1
 
         rm -fr "${tmp_ostree}"
     done
