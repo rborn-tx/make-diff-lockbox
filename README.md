@@ -32,6 +32,28 @@ To learn about all available options, run:
 make-diff-lockbox --help
 ```
 
+
+## Running from a container
+
+To meet the necessary dependencies without installing them on the host system, users can build a self-contained Docker image that includes the script by using the provided `Dockerfile`.
+
+To build the image, navigate to the root directory of this project and run the following command:
+
+```bash
+docker build -f Dockerfile -t make-diff-lockbox:latest .
+```
+
+Once the image is built, execute the script by running the Docker image. To streamline this process, it is recommended to define a function in a shell session as follows:
+
+```bash
+make-diff-lockbox() {
+    docker run --rm -it -v "$(pwd):/workdir" --user="$(id -u):$(id -g)" make-diff-lockbox:latest "$@"
+}
+```
+
+After defining this function, invoke it in the same way as invoking the script directly.
+
+
 ## General workflow
 
 To run `make-diff-lockbox`, users must provide two Lockboxes which need to be created (defined and downloaded) beforehand.
