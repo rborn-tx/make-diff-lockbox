@@ -11,7 +11,7 @@ set -e -o pipefail
 
 # DEBUG can be passed in the environment (values: "yes" or "" (empty))
 DEBUG=${DEBUG:-}
-SIM_PULL_ROUNDS_DEFAULT=${SIM_PULL_ROUNDS_DEFAULT:-40}
+SIM_PULL_ROUNDS_DEFAULT=${SIM_PULL_ROUNDS_DEFAULT:-1}
 MAX_OUTSTD_FETCHER_REQUESTS_SUPP=${MAX_OUTSTD_FETCHER_REQUESTS_SUPP:-}
 
 # Default values for optional arguments.

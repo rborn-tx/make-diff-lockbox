@@ -17,7 +17,7 @@ For running the script, ensure the following dependencies are installed (for Deb
 - findutils
 - sed
 - grep
-- ostree
+- ostree >= 2024.5 (e.g. Debian "trixie" fullfils this version requirement)
 
 
 ## Usage
@@ -61,7 +61,7 @@ Here's an outline of the operations performed by the script **when using static-
   - Pull the second commit into the "pull-test" repository, collecting the list of files fetched during the operation.
 - Produce the final repository containing only the static-deltas and any files accessed during the "pull-test" operations.
 
-The reason for performing these simulation runs is to address the non-deterministic behavior of OSTree when fetching multiple artifacts in parallel.
+The reason for performing these simulation runs is to address the non-deterministic behavior of older versions of OSTree when fetching multiple artifacts in parallel.
 
 The operations performed by the script **when not using static-deltas** are just:
 
